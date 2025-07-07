@@ -82,6 +82,8 @@
  *                              read samples big-endian               *
  *10/15/95  mc@fivebats.com     Modified get_audio() for layer3-LSF   *
  **********************************************************************/
+
+#include <stdio.h>
  
 #include "common.h"
 #include "encoder.h"

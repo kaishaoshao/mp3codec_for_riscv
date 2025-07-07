@@ -108,13 +108,18 @@
 #endif
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <assert.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>    // 声明fileno()函数
+#include <sys/stat.h> 
+
 #include "common.h"
 #include "encoder.h"
 #include "l3psy.h"
 #include "mdct.h"
 #include "loop.h"
 #include "l3bitstream.h"
-#include <assert.h>
 
 /* Global variable definitions for "musicin.c" */
 
@@ -453,9 +458,7 @@ void print_config( frame_params *fr_ps, int *psy, char *inPath, char *outPath)
 
 int frameNum=0;
 
-void main(argc, argv)
-int     argc;
-char    **argv;
+int main(int argc, char* argv[])
 {
     typedef double SBS[2][3][SCALE_BLOCK][SBLIMIT];
     SBS  FAR        *sb_sample;

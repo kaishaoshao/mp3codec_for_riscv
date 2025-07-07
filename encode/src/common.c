@@ -155,8 +155,7 @@ enum byte_order NativeByteOrder = order_unknown;
 /* The system uses a variety of data files.  By opening them via this
    function, we can accommodate various locations. */
 
-FILE *OpenTableFile(name)
-char *name;
+FILE *OpenTableFile(char* name)
 {
     char fulname[80];
     char *envdir;
@@ -170,8 +169,8 @@ char *name;
     
 #ifdef UNIX                       /* envir. variables for UNIX only */
 {
-    char *getenv();
-    
+    // char *getenv(); // 旧版本
+    char *getenv(const char *);
     envdir = getenv(MPEGTABENV);   /* check for environment */
     if(envdir != NULL)
 	strcpy(fulname, envdir);
@@ -208,9 +207,7 @@ if( (f=fopen(fulname,"r"))==NULL ) {
 *
 **********************************************************************/
 
-int read_bit_alloc(table, alloc)        /* read in table, return # subbands */
-int table;
-al_table *alloc;
+int read_bit_alloc(int table, al_table* alloc)        /* read in table, return # subbands */
 {
 #if 0
         unsigned int a, b, c, d, i, j;
@@ -285,8 +282,7 @@ extern unsigned int alloc_4_data[];
 *
 **********************************************************************/
 
-int pick_table(fr_ps)   /* choose table, load if necess, return # sb's */
-frame_params *fr_ps;
+int pick_table(frame_params * fr_ps)   /* choose table, load if necess, return # sb's */
 {
         int table, lay, ws, bsp, br_per_ch, sfrq;
         int sblim = fr_ps->sblimit;     /* return current value if no load */
@@ -317,8 +313,7 @@ frame_params *fr_ps;
         return sblim;
 }
 
-int js_bound(lay, m_ext)
-int lay, m_ext;
+int js_bound(int lay, int m_ext)
 {
 static int jsb_table[3][4] =  { { 4, 8, 12, 16 }, { 4, 8, 12, 16},
                                 { 0, 4, 8, 16} };  /* lay+m_e -> jsbound */
@@ -330,8 +325,7 @@ static int jsb_table[3][4] =  { { 4, 8, 12, 16 }, { 4, 8, 12, 16},
     return(jsb_table[lay-1][m_ext]);
 }
 
-void hdr_to_frps(fr_ps) /* interpret data in hdr str to fields in fr_ps */
-frame_params *fr_ps;
+void hdr_to_frps(frame_params* fr_ps) /* interpret data in hdr str to fields in fr_ps */
 {
 layer *hdr = fr_ps->header;     /* (or pass in as arg?) */
 
@@ -346,9 +340,7 @@ layer *hdr = fr_ps->header;     /* (or pass in as arg?) */
     /* alloc, tab_num set in pick_table */
 }
 
-void WriteHdr(fr_ps, s)
-frame_params *fr_ps;
-FILE *s;
+void WriteHdr(frame_params *fr_ps,FILE *s)
 {
 layer *info = fr_ps->header;
 
@@ -367,10 +359,7 @@ layer *info = fr_ps->header;
    fflush(s);
 }
 
-void WriteBitAlloc(bit_alloc, f_p, s)
-unsigned int bit_alloc[2][SBLIMIT];
-frame_params *f_p;
-FILE *s;
+void WriteBitAlloc(unsigned int bit_alloc[2][SBLIMIT], frame_params* f_p, FILE* s)
 {
 int i,j;
 int st = f_p->stereo;
@@ -386,10 +375,7 @@ int jsb = f_p->jsbound;
     fprintf(s, "\n");   fflush(s);
 }
 
-void WriteScale(bit_alloc, scfsi, scalar, fr_ps, s)
-unsigned int bit_alloc[2][SBLIMIT], scfsi[2][SBLIMIT], scalar[2][3][SBLIMIT];
-frame_params *fr_ps;
-FILE *s;
+void WriteScale(unsigned int bit_alloc[2][SBLIMIT], unsigned int scfsi[2][SBLIMIT], unsigned int scalar[2][3][SBLIMIT], frame_params* fr_ps, FILE *s)
 {
 int stereo  = fr_ps->stereo;
 int sblimit = fr_ps->sblimit;
@@ -426,12 +412,7 @@ int i,j,k;
         }
 }
 
-void WriteSamples(ch, sample, bit_alloc, fr_ps, s)
-int ch;
-unsigned int FAR sample[SBLIMIT];
-unsigned int bit_alloc[SBLIMIT];
-frame_params *fr_ps;
-FILE *s;
+void WriteSamples(int ch, unsigned int FAR sample, unsigned int bit_alloc, frame_params *fr_ps, FILE *s)
 {
 int i;
 int stereo = fr_ps->stereo;
@@ -445,8 +426,7 @@ int sblimit = fr_ps->sblimit;
         else                    fprintf(s, "\t");
 }
 
-int NumericQ(s) /* see if a string lookd like a numeric argument */
-char *s;
+int NumericQ(char *s) /* see if a string lookd like a numeric argument */
 {
 char    c;
 
@@ -480,9 +460,7 @@ int     found = 0;
     }
 }
 
-int SmpFrqIndex(sRate, version)  /* convert samp frq in Hz to index */
-long sRate;             /* legal rates 16000, 22050, 24000, 32000, 44100, 48000 */
-int  *version;
+int SmpFrqIndex(long sRate, int * version)  /* convert samp frq in Hz to index long sRate; legal rates 16000, 22050, 24000, 32000, 44100, 48000 */
 {
     if (sRate == 44100L) {
         *version = MPEG_AUDIO_ID; return(0);
@@ -514,9 +492,7 @@ int  *version;
 *
 *******************************************************************************/
 
-void  FAR *mem_alloc(block, item)
-unsigned long   block;
-char            *item;
+void  FAR *mem_alloc(unsigned long  block, char* item)
 {
 
     void    *ptr;
@@ -555,8 +531,7 @@ char            *item;
 *
 *****************************************************************************/
 
-void    mem_free(ptr_addr)
-void    **ptr_addr;
+void  mem_free(void  **ptr_addr)
 {
 
     if (*ptr_addr != NULL){
@@ -576,10 +551,7 @@ void    **ptr_addr;
 *
 *******************************************************************************/
 
-int memcheck(array, test, num)
-char *array;
-int test;       /* but only tested as a char (bottom 8 bits) */
-int num;
+int memcheck(char* array, int test, int num)  /* but only tested as a char (bottom 8 bits) */
 {
  int i=0;
 
@@ -617,7 +589,7 @@ enum byte_order DetermineByteOrder()
 	}
 }
 
-void SwapBytesInWords( short *loc, int words )
+void SwapBytesInWords(short *loc, int words )
 {
 	short thisval;
 	for (; words > 0; words-- ) {
@@ -783,8 +755,7 @@ int aiff_write_headers( FILE *file_ptr, IFF_AIFF *aiff_ptr )
 /*                 otherwise returns 0                                      */
 
 /* refill the buffer from the input device when the buffer becomes empty    */
-int refill_buffer(bs)
-Bit_stream_struc *bs;   /* bit stream structure */
+int refill_buffer(Bit_stream_struc *bs) /* bit stream structure */
 {
    register int i=bs->buf_size-2-bs->buf_byte_idx;
    register unsigned long n=1;
@@ -840,9 +811,7 @@ Bit_stream_struc *bs;   /* bit stream structure */
 static char *he = "0123456789ABCDEF";
 
 /* empty the buffer to the output device when the buffer becomes full */
-void empty_buffer(bs, minimum)
-Bit_stream_struc *bs;   /* bit stream structure */
-int minimum;            /* end of the buffer to empty */
+void empty_buffer(Bit_stream_struc *bs, int minimum) /* bit stream structure */ /* end of the buffer to empty */
 {
    register int i;
 
@@ -867,10 +836,7 @@ fflush(bs->pt); /* NEW SS to assist in debugging*/
 }
 
 /* open the device to write the bit stream into it */
-void open_bit_stream_w(bs, bs_filenam, size)
-Bit_stream_struc *bs;   /* bit stream structure */
-char *bs_filenam;       /* name of the bit stream file */
-int size;               /* size of the buffer */
+void open_bit_stream_w(Bit_stream_struc *bs, char *bs_filenam, int size) /* bit stream structure */ /* name of the bit stream file */ /* size of the buffer */
 {
    if ((bs->pt = fopen(bs_filenam, "wb")) == NULL) {
       printf("Could not create \"%s\".\n", bs_filenam);
@@ -886,10 +852,7 @@ int size;               /* size of the buffer */
 }
 
 /* open the device to read the bit stream from it */
-void open_bit_stream_r(bs, bs_filenam, size)
-Bit_stream_struc *bs;   /* bit stream structure */
-char *bs_filenam;       /* name of the bit stream file */
-int size;               /* size of the buffer */
+void open_bit_stream_r(Bit_stream_struc *bs, char* bs_filenam, int size) /* bit stream structure */ /* name of the bit stream file */ /* size of the buffer */
 {
    register unsigned long n;
    register unsigned char flag = 1;
@@ -957,16 +920,14 @@ int size;               /* size of the buffer */
 }
 
 /*close the device containing the bit stream after a read process*/
-void close_bit_stream_r(bs)
-Bit_stream_struc *bs;   /* bit stream structure */
+void close_bit_stream_r(Bit_stream_struc *bs)/* bit stream structure */
 {
    fclose(bs->pt);
    desalloc_buffer(bs);
 }
 
 /*close the device containing the bit stream after a write process*/
-void close_bit_stream_w(bs)
-Bit_stream_struc *bs;   /* bit stream structure */
+void close_bit_stream_w(Bit_stream_struc *bs) /* bit stream structure */
 {
    empty_buffer(bs, bs->buf_byte_idx);
    fclose(bs->pt);
@@ -974,9 +935,8 @@ Bit_stream_struc *bs;   /* bit stream structure */
 }
 
 /*open and initialize the buffer; */
-void alloc_buffer(bs, size)
-Bit_stream_struc *bs;   /* bit stream structure */
-int size;
+void alloc_buffer(Bit_stream_struc *bs, int size)
+   /* bit stream structure */
 {
    bs->buf = (unsigned char FAR *) mem_alloc(size*sizeof(unsigned
               char), "buffer");
@@ -1248,10 +1208,7 @@ int N;          /* sync word length */
 *
 *****************************************************************************/
 
-void I_CRC_calc(fr_ps, bit_alloc, crc)
-frame_params *fr_ps;
-unsigned int bit_alloc[2][SBLIMIT];
-unsigned int *crc;
+void I_CRC_calc(frame_params *fr_ps, unsigned int bit_alloc[2][SBLIMIT], unsigned int *crc)
 {
         int i, k;
         layer *info = fr_ps->header;
@@ -1274,10 +1231,7 @@ unsigned int *crc;
                         update_CRC(bit_alloc[k][i], 4, crc);
 }
 
-void II_CRC_calc(fr_ps, bit_alloc, scfsi, crc)
-frame_params *fr_ps;
-unsigned int bit_alloc[2][SBLIMIT], scfsi[2][SBLIMIT];
-unsigned int *crc;
+void II_CRC_calc(frame_params *fr_ps, unsigned int bit_alloc[2][SBLIMIT], unsigned int scfsi[2][SBLIMIT], unsigned int *crc)
 {
         int i, k;
         layer *info = fr_ps->header;
@@ -1307,8 +1261,7 @@ unsigned int *crc;
                                 update_CRC(scfsi[k][i], 2, crc);
 }
 
-void update_CRC(data, length, crc)
-unsigned int data, length, *crc;
+void update_CRC(unsigned int data, unsigned int length, unsigned int *crc)
 {
         unsigned int  masking, carry;
 
@@ -1402,8 +1355,8 @@ unsigned long hsstell()
 extern int putmask[9];
 
 /*read N bit from the bit stream */
-unsigned long hgetbits(N)
-int N;                  /* number of bits to read from the bit stream */
+unsigned long hgetbits(int N)
+  /* number of bits to read from the bit stream */
 {
  unsigned long val=0;
  register int j = N;
@@ -1437,17 +1390,16 @@ return(hgetbits(1));
 }
 
 /*write N bits into the bit stream */
-void hputbuf(val, N)
-unsigned int val;       /* val to write into the buffer */
-int N;                  /* number of bits of val */
+void hputbuf(unsigned int val, int N)
+  /* val to write into the buffer */
+  /* number of bits of val */
 {
   if (N != 8) { printf("Not Supported yet!!\n"); exit(-3); }
   buf[offset % BUFSIZE] = val;
   offset++;
 }
 
-void rewindNbits( N )
-int N;
+void rewindNbits(int N)
 {
    totbit -= N;
    buf_bit_idx += N;
@@ -1457,8 +1409,7 @@ int N;
    }
 }
 
-void rewindNbytes( N )
-int N;
+void rewindNbytes(int N)
 {
    totbit -= N*8;
    buf_byte_idx -= N;

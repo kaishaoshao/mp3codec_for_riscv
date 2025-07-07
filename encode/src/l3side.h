@@ -25,7 +25,7 @@
 
 /* #define CBLIMIT_SHORT 12 */
 
-void l3deco();
+void l3deco(void);
 
 typedef double	D576[576];
 typedef int	I576[576];

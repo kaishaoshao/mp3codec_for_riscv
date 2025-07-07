@@ -28,6 +28,8 @@
 #include "common.h"
 #include "encoder.h"
 
+#include <stdlib.h>
+
 extern float absthr_0[];
 extern float absthr_1[];
 extern float absthr_2[];

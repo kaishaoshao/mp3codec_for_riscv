@@ -68,6 +68,7 @@
 
 #include "common.h"
 #include "encoder.h"
+#include <stdlib.h>
 #define LONDON                  /* enable "LONDON" modification */
 #define MAKE_SENSE              /* enable "MAKE_SENSE" modification */
 #define MI_OPTION               /* enable "MI_OPTION" modification */
