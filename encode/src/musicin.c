@@ -160,14 +160,7 @@ int		   iswav = 0, littleData = 0, streaming_input = 0;
 ************************************************************************/
  
 void
-parse_args(argc, argv, fr_ps, psy, num_samples, inPath, outPath)
-int     argc;
-char    **argv;
-frame_params  *fr_ps;
-int     *psy;
-unsigned long *num_samples;
-char    inPath[MAX_NAME_SIZE];
-char    outPath[MAX_NAME_SIZE];
+parse_args(int argc, char **argv,frame_params  *fr_ps, int* psy, unsigned long *num_samples, char inPath[MAX_NAME_SIZE], char  outPath[MAX_NAME_SIZE])
 {
    FLOAT srate;
    int   brate;

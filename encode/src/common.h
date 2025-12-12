@@ -393,8 +393,7 @@ extern void           WriteScale(unsigned int[2][SBLIMIT],
                         frame_params*, FILE*);
 // extern void           WriteSamples(int, unsigned int FAR [SBLIMIT],
 //                         unsigned int[SBLIMIT], frame_params*, FILE*);
-extern void           WriteSamples(int ch, unsigned int FAR sample, unsigned int bit_alloc, frame_params *fr_ps, FILE *s);
-
+extern void           WriteSamples(int ch, unsigned int FAR sample[SBLIMIT] , unsigned int bit_alloc[SBLIMIT], frame_params *fr_ps, FILE *s);
 extern int            NumericQ(char*);
 extern int            BitrateIndex(int, int, int);
 extern int            SmpFrqIndex(long, int*);

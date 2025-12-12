@@ -84,7 +84,8 @@
  **********************************************************************/
 
 #include <stdio.h>
- 
+#include <stdlib.h> 
+
 #include "common.h"
 #include "encoder.h"
 
@@ -294,7 +295,7 @@ int k;
     typedef double FAR XX[2][HAN_SIZE];
     static XX FAR *x;
     int i, j;
-    static off[2] = {0,0};
+    static int off[2] = {0,0};
     static char init = 0;
     if (!init) {
         x = (XX FAR *) mem_alloc(sizeof(XX),"x");

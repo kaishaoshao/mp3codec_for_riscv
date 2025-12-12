@@ -59,8 +59,7 @@
 
 
 int
-ReadByte(fp)
-FILE *fp;
+ReadByte(FILE *fp)
 {
 	int	result;
 
@@ -72,8 +71,7 @@ FILE *fp;
 
 
 int
-Read16BitsLowHigh(fp)
-FILE *fp;
+Read16BitsLowHigh(FILE *fp)
 {
 	int	first, second, result;
 
@@ -90,8 +88,7 @@ FILE *fp;
 
 
 int
-Read16BitsHighLow(fp)
-FILE *fp;
+Read16BitsHighLow(FILE *fp)
 {
 	int	first, second, result;
 
@@ -108,18 +105,15 @@ FILE *fp;
 
 
 void
-Write8Bits(fp, i)
-FILE *fp;
-int i;
+Write8Bits(FILE *fp, int i)
 {
 	putc(i&0xff,fp);
 }
 
 
 void
-Write16BitsLowHigh(fp, i)
-FILE *fp;
-int i;
+Write16BitsLowHigh(FILE *fp, int i)
+
 {
 	putc(i&0xff,fp);
 	putc((i>>8)&0xff,fp);
@@ -127,9 +121,7 @@ int i;
 
 
 void
-Write16BitsHighLow(fp, i)
-FILE *fp;
-int i;
+Write16BitsHighLow(FILE *fp, int i)
 {
 	putc((i>>8)&0xff,fp);
 	putc(i&0xff,fp);
@@ -137,8 +129,7 @@ int i;
 
 
 int
-Read24BitsHighLow(fp)
-FILE *fp;
+Read24BitsHighLow(FILE *fp)
 {
 	int	first, second, third;
 	int	result;
@@ -157,8 +148,7 @@ FILE *fp;
 
 
 int
-Read32Bits(fp)
-FILE *fp;
+Read32Bits(FILE *fp)
 {
 	int	first, second, result;
 
@@ -175,8 +165,7 @@ FILE *fp;
 
 
 int
-Read32BitsHighLow(fp)
-FILE *fp;
+Read32BitsHighLow(FILE *fp)
 {
 	int	first, second, result;
 
@@ -193,9 +182,7 @@ FILE *fp;
 
 
 void
-Write32Bits(fp, i)
-FILE *fp;
-int i;
+Write32Bits(FILE *fp, int i)
 {
 	Write16BitsLowHigh(fp,(int)(i&0xffffL));
 	Write16BitsLowHigh(fp,(int)((i>>16)&0xffffL));
@@ -203,9 +190,7 @@ int i;
 
 
 void
-Write32BitsLowHigh(fp, i)
-FILE *fp;
-int i;
+Write32BitsLowHigh(FILE *fp, int i)
 {
 	Write16BitsLowHigh(fp,(int)(i&0xffffL));
 	Write16BitsLowHigh(fp,(int)((i>>16)&0xffffL));
@@ -213,9 +198,7 @@ int i;
 
 
 void
-Write32BitsHighLow(fp, i)
-FILE *fp;
-int i;
+Write32BitsHighLow(FILE *fp, int i)
 {
 	Write16BitsHighLow(fp,(int)((i>>16)&0xffffL));
 	Write16BitsHighLow(fp,(int)(i&0xffffL));
@@ -277,8 +260,7 @@ FILE *fp;
 }
 
 defdouble
-ReadIeeeFloatLowHigh(fp)
-FILE *fp;
+ReadIeeeFloatLowHigh(FILE* fp)
 {
 	char	bits[kFloatLength];
 
@@ -287,8 +269,7 @@ FILE *fp;
 }
 
 defdouble
-ReadIeeeDoubleHighLow(fp)
-FILE *fp;
+ReadIeeeDoubleHighLow(FILE* fp)
 {
 	char	bits[kDoubleLength];
 
@@ -297,8 +278,7 @@ FILE *fp;
 }
 
 defdouble
-ReadIeeeDoubleLowHigh(fp)
-FILE *fp;
+ReadIeeeDoubleLowHigh(FILE* fp)
 {
 	char	bits[kDoubleLength];
 
@@ -307,8 +287,7 @@ FILE *fp;
 }
 
 defdouble
-ReadIeeeExtendedHighLow(fp)
-FILE *fp;
+ReadIeeeExtendedHighLow(FILE* fp)
 {
 	char	bits[kExtendedLength];
 
@@ -317,8 +296,7 @@ FILE *fp;
 }
 
 defdouble
-ReadIeeeExtendedLowHigh(fp)
-FILE *fp;
+ReadIeeeExtendedLowHigh(FILE* fp)
 {
 	char	bits[kExtendedLength];
 
@@ -327,9 +305,7 @@ FILE *fp;
 }
 
 void
-WriteIeeeFloatLowHigh(fp, num)
-FILE *fp;
-defdouble num;
+WriteIeeeFloatLowHigh(FILE *fp, defdouble num)
 {
 	char	bits[kFloatLength];
 
@@ -338,9 +314,7 @@ defdouble num;
 }
 
 void
-WriteIeeeFloatHighLow(fp, num)
-FILE *fp;
-defdouble num;
+WriteIeeeFloatHighLow(FILE *fp, defdouble num)
 {
 	char	bits[kFloatLength];
 
@@ -349,9 +323,7 @@ defdouble num;
 }
 
 void
-WriteIeeeDoubleLowHigh(fp, num)
-FILE *fp;
-defdouble num;
+WriteIeeeDoubleLowHigh(FILE *fp, defdouble num)
 {
 	char	bits[kDoubleLength];
 
@@ -360,9 +332,7 @@ defdouble num;
 }
 
 void
-WriteIeeeDoubleHighLow(fp, num)
-FILE *fp;
-defdouble num;
+WriteIeeeDoubleHighLow(FILE *fp, defdouble num)
 {
 	char	bits[kDoubleLength];
 
@@ -371,9 +341,7 @@ defdouble num;
 }
 
 void
-WriteIeeeExtendedLowHigh(fp, num)
-FILE *fp;
-defdouble num;
+WriteIeeeExtendedLowHigh(FILE *fp, defdouble num)
 {
 	char	bits[kExtendedLength];
 
@@ -383,9 +351,7 @@ defdouble num;
 
 
 void
-WriteIeeeExtendedHighLow(fp, num)
-FILE *fp;
-defdouble num;
+WriteIeeeExtendedHighLow(FILE *fp, defdouble num)
 {
 	char	bits[kExtendedLength];
 

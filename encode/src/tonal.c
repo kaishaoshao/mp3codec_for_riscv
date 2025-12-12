@@ -85,8 +85,7 @@ int crit_band;
 int FAR *cbound;
 int sub_size;
 
-void read_cbound(lay,freq)  /* this function reads in critical */
-int lay, freq;              /* band boundaries                 */
+void read_cbound(int lay, int freq)  /* this function reads in critical */             /* band boundaries                 */
 {
  int i,j,k;
  FILE *fp;
@@ -114,9 +113,7 @@ int lay, freq;              /* band boundaries                 */
  fclose(fp);
 }        
 
-void read_freq_band(ltg,lay,freq)  /* this function reads in   */
-int lay, freq;                     /* frequency bands and bark */
-g_ptr FAR *ltg;                /* values                   */
+void read_freq_band(g_ptr* ltg, int lay, int FAR freq)  /* this function reads in   */   /* frequency bands and bark */  /* values   */
 {
  int i,j, k;
  double b,c;
@@ -152,9 +149,7 @@ g_ptr FAR *ltg;                /* values                   */
  fclose(fp);
 }
 
-void make_map(power, ltg)       /* this function calculates the */
-mask FAR power[HAN_SIZE];   /* global masking threshold     */
-g_thres FAR *ltg;
+void make_map(mask FAR power[HAN_SIZE], g_thres FAR *ltg)       /* this function calculates the */ /* global masking threshold     */  
 {
  int i,j;
 
@@ -162,8 +157,7 @@ g_thres FAR *ltg;
     power[j].map = i;
 }
 
-double add_db(a,b)
-double a,b;
+double add_db(double a, double b)
 {
  a = pow(10.0,a/10.0);
  b = pow(10.0,b/10.0);
@@ -994,10 +988,7 @@ double FAR spike[SBLIMIT], scale[SBLIMIT], ltmin[SBLIMIT];
 *
 ****************************************************************/
 
-void I_Psycho_One(buffer, scale, ltmin, fr_ps)
-short FAR buffer[2][1152];
-double FAR scale[2][SBLIMIT], ltmin[2][SBLIMIT];
-frame_params *fr_ps;
+void I_Psycho_One(short FAR buffer[2][1152], double FAR scale[2][SBLIMIT], double FAR ltmin[2][SBLIMIT], frame_params *fr_ps)
 {
  int stereo = fr_ps->stereo;
  the_layer info = fr_ps->header;

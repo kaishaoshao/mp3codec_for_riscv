@@ -80,6 +80,8 @@ int scale_bitcount( III_scalefac_t *scalefac,
                     gr_info *cod_info,
                     int gr,
                     int ch );
+int scale_bitcount_lsf( III_scalefac_t *scalefac, gr_info *cod_info,
+		    int gr, int ch );
 void calc_noise( double xr[576],
                  int ix[576],
                  gr_info *cod_info,

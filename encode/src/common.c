@@ -412,7 +412,7 @@ int i,j,k;
         }
 }
 
-void WriteSamples(int ch, unsigned int FAR sample, unsigned int bit_alloc, frame_params *fr_ps, FILE *s)
+void WriteSamples(int ch, unsigned int FAR sample[SBLIMIT] , unsigned int bit_alloc[SBLIMIT], frame_params *fr_ps, FILE *s)
 {
 int i;
 int stereo = fr_ps->stereo;
@@ -944,8 +944,7 @@ void alloc_buffer(Bit_stream_struc *bs, int size)
 }
 
 /*empty and close the buffer */
-void desalloc_buffer(bs)
-Bit_stream_struc *bs;   /* bit stream structure */
+void desalloc_buffer(Bit_stream_struc *bs)  /* bit stream structure */
 {
    free(bs->buf);
 }
@@ -953,9 +952,7 @@ Bit_stream_struc *bs;   /* bit stream structure */
 int putmask[9]={0x0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff};
 int clearmask[9]={0xff, 0xfe, 0xfc, 0xf8, 0xf0, 0xe0, 0xc0, 0x80, 0x0};
 
-void back_track_buffer(bs, N) /* goes back N bits in the buffer */
-Bit_stream_struc *bs;   /* bit stream structure */
-int N;
+void back_track_buffer(Bit_stream_struc *bs, int N)  /* bit stream structure */ /* goes back N bits in the buffer */
 {
    int tmp = N - (N/8)*8;
    register int i;
@@ -976,8 +973,7 @@ int N;
 int mask[8]={0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80};
 
 /*read 1 bit from the bit stream */
-unsigned int get1bit(bs)
-Bit_stream_struc *bs;   /* bit stream structure */
+unsigned int get1bit(Bit_stream_struc *bs) /* bit stream structure */
 {
    unsigned int bit;
    register int i;
@@ -1005,9 +1001,7 @@ Bit_stream_struc *bs;   /* bit stream structure */
 }
 
 /*write 1 bit from the bit stream */
-void put1bit(bs, bit)
-Bit_stream_struc *bs;   /* bit stream structure */
-int bit;                /* bit to write into the buffer */
+void put1bit(Bit_stream_struc *bs, int bit) /* bit stream structure */              /* bit to write into the buffer */
 {
    bs->totbit++;
 
@@ -1023,9 +1017,7 @@ int bit;                /* bit to write into the buffer */
 }
 
 /*look ahead for the next N bits from the bit stream */
-unsigned long look_ahead(bs, N)
-Bit_stream_struc *bs;   /* bit stream structure */
-int N;                  /* number of bits to read from the bit stream */
+unsigned long look_ahead(Bit_stream_struc *bs, int N) /* bit stream structure */  /* number of bits to read from the bit stream */
 {
  unsigned long val=0;
  register int j = N;
@@ -1052,9 +1044,7 @@ int N;                  /* number of bits to read from the bit stream */
 }
 
 /*read N bit from the bit stream */
-unsigned long getbits(bs, N)
-Bit_stream_struc *bs;   /* bit stream structure */
-int N;                  /* number of bits to read from the bit stream */
+unsigned long getbits(Bit_stream_struc *bs, int N) /* bit stream structure */  /* number of bits to read from the bit stream */
 {
  unsigned long val=0;
  register int i;
@@ -1091,10 +1081,7 @@ int N;                  /* number of bits to read from the bit stream */
 }
 
 /*write N bits into the bit stream */
-void putbits(bs, val, N)
-Bit_stream_struc *bs;   /* bit stream structure */
-unsigned int val;       /* val to write into the buffer */
-int N;                  /* number of bits of val */
+void putbits(Bit_stream_struc *bs, unsigned int val, int N)  /* bit stream structure */  /* val to write into the buffer */ /* number of bits of val */
 {
  register int j = N;
  register int k, tmp;
@@ -1120,10 +1107,7 @@ int N;                  /* number of bits of val */
 }
 
 /*write N bits byte aligned into the bit stream */
-void byte_ali_putbits(bs, val, N)
-Bit_stream_struc *bs;   /* bit stream structure */
-unsigned int val;       /* val to write into the buffer */
-int N;                  /* number of bits of val */
+void byte_ali_putbits(Bit_stream_struc *bs, unsigned int val, int N)  /* bit stream structure */  /* val to write into the buffer */ /* number of bits of val */
 {
  unsigned long aligning, sstell();
 
@@ -1137,9 +1121,7 @@ int N;                  /* number of bits of val */
 }
 
 /*read the next bute aligned N bits from the bit stream */
-unsigned long byte_ali_getbits(bs, N)
-Bit_stream_struc *bs;   /* bit stream structure */
-int N;                  /* number of bits of val */
+unsigned long byte_ali_getbits(Bit_stream_struc *bs, int N) /* bit stream structure */ /* number of bits of val */
 {
  unsigned long aligning, sstell();
 
@@ -1153,8 +1135,7 @@ int N;                  /* number of bits of val */
 }
 
 /*return the current bit stream length (in bits)*/
-unsigned long sstell(bs)
-Bit_stream_struc *bs;   /* bit stream structure */
+unsigned long sstell(Bit_stream_struc *bs) /* bit stream structure */
 {
   return(bs->totbit);
 }
@@ -1162,8 +1143,7 @@ Bit_stream_struc *bs;   /* bit stream structure */
 /*return the status of the bit stream*/
 /* returns 1 if end of bit stream was reached */
 /* returns 0 if end of bit stream was not reached */
-int end_bs(bs)
-Bit_stream_struc *bs;   /* bit stream structure */
+int end_bs(Bit_stream_struc *bs) /* bit stream structure */
 {
   return(bs->eobs);
 }
@@ -1171,10 +1151,7 @@ Bit_stream_struc *bs;   /* bit stream structure */
 /*this function seeks for a byte aligned sync word in the bit stream and
   places the bit stream pointer right after the sync.
   This function returns 1 if the sync was found otherwise it returns 0  */
-int seek_sync(bs, sync, N)
-Bit_stream_struc *bs;   /* bit stream structure */
-long sync;      /* sync word maximum 32 bits */
-int N;          /* sync word length */
+int seek_sync(Bit_stream_struc *bs, long sync, int N) /* bit stream structure */ /* sync word maximum 32 bits */ /* sync word length */
 {
 #if defined(MACINTOSH) && !defined(__powerc)
  double pow();

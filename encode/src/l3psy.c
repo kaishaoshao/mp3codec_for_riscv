@@ -29,6 +29,7 @@
 #include "l3psy.h"
 #include "l3side.h"
 #include <assert.h>
+#include <stdlib.h>
 
 #define maximum(x,y) ( (x>y) ? x : y )
 #define minimum(x,y) ( (x<y) ? x : y )
